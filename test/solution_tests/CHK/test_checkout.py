@@ -39,23 +39,24 @@ class CheckoutTests(unittest.TestCase):
             checkout('AAABAAAAABA'), 425  # 130 + 200 + 50 + 45
         )
 
-    def test_checkout_2e_discount_no_b(self):
-        self.assertEqual(
-            checkout('EE'), 80
-        )
-
-    def test_checkout_2e_discount_with_2b_deal(self):
-        # the saving from the 2b is better than the saving from free b
-        self.assertEqual(
-            checkout('EEBB'), 85  # (40 * 2) + 45
-        )
-
-    def test_checkout_2_2e_discount_with_2b(self):
-        self.assertEqual(
-            checkout('EEBBEE'), 160  # (40 * 4)
-        )
+    # def test_checkout_2e_discount_no_b(self):
+    #     self.assertEqual(
+    #         checkout('EE'), 80
+    #     )
+    #
+    # def test_checkout_2e_discount_with_2b_deal(self):
+    #     # the saving from the 2b is better than the saving from free b
+    #     self.assertEqual(
+    #         checkout('EEBB'), 85  # (40 * 2) + 45
+    #     )
+    #
+    # def test_checkout_2_2e_discount_with_2b(self):
+    #     self.assertEqual(
+    #         checkout('EEBBEE'), 160  # (40 * 4)
+    #     )
 
 
 if __name__ == '__main__':
     unittest.main()
+
 
