@@ -63,13 +63,11 @@ def checkout(skus: str) -> int:
     sku_counts = Counter(skus)
     multi_offer_totals = _calculate_multi_item_offer_totals(sku_counts)
 
-    print('n_totals_data')
-    print([v for v in multi_offer_totals.values()])
     preliminary_total = sum([v for v in multi_offer_totals.values()])
 
     cost_of_e = _calculate_cost_of_E(sku_counts)
-    print('discount', cost_of_e)
     return preliminary_total + cost_of_e
+
 
 
 
