@@ -21,11 +21,12 @@ class CheckoutTests(unittest.TestCase):
 
     def test_checkout_with_deals(self):
         self.assertEqual(
-            checkout('AAABBCD'), 130 + 45 + 20 + 15
+            checkout('AAABBCD'), 201  # 130 + 45 + 20 + 15
         )
 
 
 if __name__ == '__main__':
     unittest.main()
+
 
 
