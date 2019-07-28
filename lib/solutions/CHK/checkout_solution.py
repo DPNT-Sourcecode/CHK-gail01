@@ -39,6 +39,21 @@ def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, 
     return deal_sums
 
 
+def _calculate_free_items_discount(sku_counts: Dict[str, int]) -> int:
+    b_counts = sku_counts.get('B', 0)
+    e_counts = sku_counts.get('E', 0)
+
+    _, remainder = divmod(b_counts, 2)
+    print('------')
+    print(remainder)
+    print(remainder - e_counts)
+    print(abs(remainder - e_counts))
+    print('------')
+    if remainder - e_counts > 0:
+        return (remainder - e_counts) * 30
+    return 0
+
+
 def checkout(skus: str) -> int:
     if set(skus) - set(VALID_SKUS):
         return -1
@@ -49,6 +64,11 @@ def checkout(skus: str) -> int:
     preliminary_total = sum([v for v in multi_offer_totals.values()])
 
     # TODO Handle discounting an item (if exists in skus) if multi-deal available
-    return preliminary_total
+    # ??? Always better to ignore free item if multi exists for that SKU?
+
+    discount = _calculate_free_items_discount(sku_counts)
+
+    return preliminary_total - discount
+
 
 
