@@ -26,7 +26,7 @@ class CheckoutTests(unittest.TestCase):
 
     def test_checkout_with_multiple_deals(self):
         self.assertEqual(
-            checkout('AAAAAAABBBBBCD'), 465  # (2 * 130) + 50 + (2 * 45) + 30 + 20 + 15
+            checkout('AAAAAAABBBBBCD'), 455  # 200 + 100 + (2 * 45) + 30 + 20 + 15
         )
 
     def test_checkout_5a_handling(self):
@@ -58,3 +58,4 @@ class CheckoutTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
