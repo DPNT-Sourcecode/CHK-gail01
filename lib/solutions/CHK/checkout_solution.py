@@ -19,10 +19,10 @@ PRICE_LOOKUP = {
     'D': 15,
 }
 
-DEAL_LOOKUP = {
-    ('A', 3): 130,
-    ('B', 2): 45
-}
+DEAL_LOOKUP = (
+    ('A', 3, 130, 50),
+    ('B', 2, 45, 30),
+)
 
 
 def checkout(skus: str) -> int:
@@ -33,17 +33,12 @@ def checkout(skus: str) -> int:
         return -1
 
     sku_counts = Counter(skus)
-    a_deal_count, a_singles = divmod(sku_counts.pop('A', 0), 3)
-    print(a_deal_count, a_singles)
-    a_total = (a_deal_count * 130) + (a_singles * 50)
-    print(a_total)
+    multi_offers_total = 0
+    for item_code, deal_num, deal_cost, normal_cost in DEAL_LOOKUP:
+        item_deal_count, item_singles = divmod(sku_counts.pop(item_code, 0), deal_num)
+        multi_offers_total += (item_deal_count * deal_cost) + (item_singles * normal_cost)
 
-    b_deal_count, b_singles = divmod(sku_counts.pop('B', 0), 2)
-    print(b_deal_count, b_singles)
-    b_total = (b_deal_count * 45) + (b_singles * 30)
-    print(b_total)
     rest = sum([PRICE_LOOKUP[s] * c for s, c in sku_counts.items()])
-    print(rest)
+    return multi_offers_total + rest
 
-    return a_total + b_total + rest
 
