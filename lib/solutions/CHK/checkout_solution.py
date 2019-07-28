@@ -20,9 +20,9 @@ DEAL_CONFIG = (
     Deal('B', ((2, 45), (1, 30))),
     Deal('C', ((1, 20), )),
     Deal('D', ((1, 15), )),
-    Deal('E', ((1, 40), )),
+    # Deal('E', ((1, 40), )),
 )
-VALID_SKUS = [d.sku for d in DEAL_CONFIG]
+VALID_SKUS = [d.sku for d in DEAL_CONFIG] + ['E']
 
 
 def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, int]:
@@ -39,7 +39,7 @@ def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, 
     return deal_sums
 
 
-def _calculate_free_items_discount(sku_counts: Dict[str, int]) -> int:
+def _calculate_cost_of_E(sku_counts: Dict[str, int]) -> int:
     # TODO Handle discounting an item (if exists in skus) if multi-deal available
     # ??? Always better to ignore free item if multi exists for that SKU?
     b_counts = sku_counts.get('B', 0)
@@ -47,15 +47,13 @@ def _calculate_free_items_discount(sku_counts: Dict[str, int]) -> int:
 
     two_e_deal_count, _ = divmod(e_counts, 2)
     two_b_deals_count, b_singles = divmod(b_counts, 2)
+    discount_items = two_b_deals_count
 
     mult_2, remainder = divmod(two_e_deal_count, 2)
+
     # if b deals are a multiple of 2 remove that many from qualify 2e
-    to_remove = 0
-    if mult_2:
-        to_remove = ((two_b_deals_count * 2) - mult_2) * 45
-    if b_singles and not two_b_deals_count:
-        to_remove += (b_singles - remainder) * 30 if (b_singles - remainder) > 0 else 0
-    return to_remove
+    discount_items -= (two_b_deals_count - mult_2)
+    return (e_counts * 40) - (discount_items * 30)
 
 
 def checkout(skus: str) -> int:
@@ -69,8 +67,9 @@ def checkout(skus: str) -> int:
     print([v for v in multi_offer_totals.values()])
     preliminary_total = sum([v for v in multi_offer_totals.values()])
 
-    discount = _calculate_free_items_discount(sku_counts)
-    print('discount', discount)
-    return preliminary_total - discount
+    cost_of_e = _calculate_cost_of_E(sku_counts)
+    print('discount', cost_of_e)
+    return preliminary_total + cost_of_e
+
 
 
