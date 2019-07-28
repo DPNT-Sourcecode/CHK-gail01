@@ -1,5 +1,6 @@
 import string
 from collections import Counter, namedtuple, defaultdict
+from typing import Dict
 
 """
 +------+-------+------------------------+
@@ -13,8 +14,6 @@ from collections import Counter, namedtuple, defaultdict
 +------+-------+------------------------+
 """
 
-# TODO Handle various offers on same item
-# TODO Handle discounting an item (if exists in skus) if multi-deal available
 
 PRICE_LOOKUP = {
     'A': 50,
@@ -24,12 +23,31 @@ PRICE_LOOKUP = {
     'E': 40,
 }
 
+Deal = namedtuple('Deal', ['sku', 'n_deals'])
 DEAL_CONFIG = (
-    ('A', 3, 130, 50),
-    ('A', 5, 200, 50),
-    ('B', 2, 45, 30),
+    Deal('A', ((5, 200), (3, 130), (1, 50))),
+    Deal('B', ((2, 45), (1, 30))),
+    Deal('C', ((1, 20), )),
+    Deal('D', ((1, 15), )),
+    Deal('E', ((1, 40), )),
 )
 
+
+# TODO Handle various offers on same item
+def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, int]:
+    deal_sums = defaultdict(int)
+    for deal in DEAL_CONFIG:
+        total_items_in_order = sku_counts.get(deal.sku)
+        running_total = 0
+        for quotiant, deal_price in deal.n_deals:
+            n_count, remainder = divmod(total_items_in_order, quotiant)
+            running_total += n_count * deal_price
+            total_items_in_order -= (n_count * quotiant)
+        deal_sums[deal.sku] = running_total
+    return deal_sums
+
+
+# TODO Handle discounting an item (if exists in skus) if multi-deal available
 
 def checkout(skus: str) -> int:
     # Should only contain uppercases Letters in input
@@ -39,19 +57,6 @@ def checkout(skus: str) -> int:
         return -1
 
     sku_counts = Counter(skus)
-    multi_offer_totals = defaultdict(list)
-    for item_code, deal_num, deal_cost, normal_cost in DEAL_CONFIG:
-        item_deal_count, item_singles = divmod(sku_counts.get(item_code, 0), deal_num)
-        multi_total = (item_deal_count * deal_cost) + (item_singles * normal_cost)
-        if multi_total:
-            multi_offer_totals[item_code].append(multi_total)
+    multi_offer_totals = _calculate_multi_item_offer_totals(sku_counts)
 
-    print(multi_offer_totals)
-    print([PRICE_LOOKUP[s] * c for s, c in sku_counts.items() if s])
-    print([min(v) for v in multi_offer_totals.values()])
-    rest = sum([PRICE_LOOKUP[s] * c for s, c in sku_counts.items() if s not in ['A', 'B']])
-    return sum([min(v) for v in multi_offer_totals.values()]) + rest
-
-
-
-
+    return sum([v for v in multi_offer_totals.values()])
