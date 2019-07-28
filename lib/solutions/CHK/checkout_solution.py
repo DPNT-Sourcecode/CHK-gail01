@@ -51,6 +51,7 @@ def _calculate_item_discount(sku_counts: Dict[str, int]) -> int:
     # If 2Es, and 2Bs reverse the cost of discounted 2 and add cost of single
     free_item_count = two_e_deal_count
     discounted_price_count = two_e_deal_count - two_b_deals_count
+    print('----')
     if b_counts and free_item_count and discounted_price_count:
         restore = (discounted_price_count * 45)
         print('restore', restore)
@@ -58,6 +59,7 @@ def _calculate_item_discount(sku_counts: Dict[str, int]) -> int:
         print('new_price', new_price)
         adjusted_price = restore - new_price
         print('adjusted_price', adjusted_price)
+        print('----')
         return adjusted_price
     return 0
 
@@ -73,6 +75,7 @@ def checkout(skus: str) -> int:
 
     cost_of_e = _calculate_item_discount(sku_counts)
     return preliminary_total + cost_of_e
+
 
 
 
