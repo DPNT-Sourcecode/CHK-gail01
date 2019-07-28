@@ -33,17 +33,17 @@ DEAL_CONFIG = (
 )
 
 
-# TODO Handle various offers on same item
 def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, int]:
     deal_sums = defaultdict(int)
     for deal in DEAL_CONFIG:
         total_items_in_order = sku_counts.get(deal.sku)
-        running_total = 0
-        for quotiant, deal_price in deal.n_deals:
-            n_count, remainder = divmod(total_items_in_order, quotiant)
-            running_total += n_count * deal_price
-            total_items_in_order -= (n_count * quotiant)
-        deal_sums[deal.sku] = running_total
+        if total_items_in_order:
+            running_total = 0
+            for quotiant, deal_price in deal.n_deals:
+                n_count, remainder = divmod(total_items_in_order, quotiant)
+                running_total += n_count * deal_price
+                total_items_in_order -= (n_count * quotiant)
+            deal_sums[deal.sku] = running_total
     return deal_sums
 
 
@@ -60,3 +60,4 @@ def checkout(skus: str) -> int:
     multi_offer_totals = _calculate_multi_item_offer_totals(sku_counts)
 
     return sum([v for v in multi_offer_totals.values()])
+
