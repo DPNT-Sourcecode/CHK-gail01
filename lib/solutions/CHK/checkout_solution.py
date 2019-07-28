@@ -33,15 +33,10 @@ def checkout(skus: str) -> int:
         return -1
 
     sku_counts = Counter(skus)
-    a_items = sku_counts.get('A', 0)
+    a_deal_count, a_singles = divmod(sku_counts.pop('A', 0), 3)
+    a_total = (a_deal_count * 130) + (a_singles * 50)
+    b_deal_count, b_singles = divmod(sku_counts.pop('B', 0), 3)
+    b_total = (b_deal_count * 130) + (b_singles * 50)
+    rest = sum([PRICE_LOOKUP[s] for s in sku_counts.keys()])
 
-    try:
-        return sum([PRICE_LOOKUP[s] for s in skus])
-    except IndexError:
-        return -1
-
-
-
-
-
-
+    return a_total + b_total + rest
