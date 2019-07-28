@@ -11,6 +11,7 @@ Our price table and offers:
 | D    | 15    |                |
 +------+-------+----------------+
 """
+import string
 
 LOOKUP = {
     'A': 50,
@@ -22,6 +23,10 @@ LOOKUP = {
 # noinspection PyUnusedLocal
 # skus = unicode string
 def checkout(skus: str) -> int:
-    string.lowercase
+    # Should only contain uppercases Letters in input
+    if set(skus).intersection(set(string.ascii_lowercase)):
+        return -1
+    if set(skus)
     return -1
+
 
