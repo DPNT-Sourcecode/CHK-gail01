@@ -21,6 +21,7 @@ PRICE_LOOKUP = {
     'B': 30,
     'C': 20,
     'D': 15,
+    'E': 40,
 }
 
 DEAL_CONFIG = (
@@ -44,3 +45,4 @@ def checkout(skus: str) -> int:
 
     rest = sum([PRICE_LOOKUP[s] * c for s, c in sku_counts.items()])
     return multi_offers_total + rest
+
