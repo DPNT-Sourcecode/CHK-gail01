@@ -9,7 +9,7 @@ class CheckoutTests(unittest.TestCase):
         self.assertEqual(checkout('aAA'), -1)
 
     def test_checkout_unknown_sku(self):
-        self.assertEqual(checkout('Z'), -1)
+        self.assertEqual(checkout('z'), -1)
 
     def test_checkout_illegal_chars(self):
         self.assertEqual(checkout('%'), -1)
@@ -89,3 +89,4 @@ class CheckoutTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
