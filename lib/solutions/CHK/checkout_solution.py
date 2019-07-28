@@ -19,10 +19,10 @@ PRICE_LOOKUP = {
     'D': 15,
 }
 
-DEAL_LOOKUP = (
+DEAL_CONFIG = (
     ('A', 3, 130, 50),
     ('B', 2, 45, 30),
-)
+)  # TODO Convert to NamedTuple or similar?
 
 
 def checkout(skus: str) -> int:
@@ -34,11 +34,12 @@ def checkout(skus: str) -> int:
 
     sku_counts = Counter(skus)
     multi_offers_total = 0
-    for item_code, deal_num, deal_cost, normal_cost in DEAL_LOOKUP:
+    for item_code, deal_num, deal_cost, normal_cost in DEAL_CONFIG:
         item_deal_count, item_singles = divmod(sku_counts.pop(item_code, 0), deal_num)
         multi_offers_total += (item_deal_count * deal_cost) + (item_singles * normal_cost)
 
     rest = sum([PRICE_LOOKUP[s] * c for s, c in sku_counts.items()])
     return multi_offers_total + rest
+
 
 
