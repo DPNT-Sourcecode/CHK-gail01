@@ -75,7 +75,3 @@ def checkout(skus: str) -> int:
 
     adjusted_free_b = _calculate_item_adjustment(sku_counts)
     return preliminary_total + adjusted_free_b
-
-
-
-
