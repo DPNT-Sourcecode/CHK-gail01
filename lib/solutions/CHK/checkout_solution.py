@@ -53,8 +53,9 @@ def _calculate_free_items_discount(sku_counts: Dict[str, int]) -> int:
     print('----')
     mult_2, remainder = divmod(two_e_deal_count, 2)
     # if b deals are a multiple of 2 remove that many from qualify 2e
-    to_remove = (two_b_deals_count - mult_2) * 45
-    to_remove += (b_singles - remainder) * 30 if (b_singles - remainder) > 0 else 0
+    to_remove = ((two_b_deals_count * 2) - mult_2) * 45
+    if b_singles and not two_b_deals_count:
+        to_remove += (b_singles - remainder) * 30 if (b_singles - remainder) > 0 else 0
     return to_remove
 
 
@@ -75,3 +76,4 @@ def checkout(skus: str) -> int:
     discount = _calculate_free_items_discount(sku_counts)
     print('discount', discount)
     return preliminary_total - discount
+
