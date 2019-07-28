@@ -14,7 +14,7 @@ from collections import Counter
 """
 
 # TODO Handle various offers on same item
-# TODO Handle discounting an item (if exists in skus)
+# TODO Handle discounting an item (if exists in skus) if multi-deal available
 
 PRICE_LOOKUP = {
     'A': 50,
@@ -44,6 +44,7 @@ def checkout(skus: str) -> int:
 
     rest = sum([PRICE_LOOKUP[s] * c for s, c in sku_counts.items()])
     return multi_offers_total + rest
+
 
 
 

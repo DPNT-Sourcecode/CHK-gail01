@@ -29,8 +29,19 @@ class CheckoutTests(unittest.TestCase):
             checkout('AAAAAAABBBBBCD'), 465  # (2 * 130) + 50 + (2 * 45) + 30 + 20 + 15
         )
 
+    def test_checkout_5a_handling(self):
+        self.assertEqual(
+            checkout('AAAAAABB'), 245  # 200 + 45
+        )
+
+    def test_checkout_3a_and_5a_plus_singles_handling(self):
+        self.assertEqual(
+            checkout('AAABAAAAABA'),  # 130 + 200 + 50 + 45
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
+
 
 
