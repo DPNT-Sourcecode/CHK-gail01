@@ -47,7 +47,7 @@ class CheckoutTests(unittest.TestCase):
     def test_checkout_2e_discount_with_2b_deal(self):
         # the saving from the 2b is better than the saving from free b
         self.assertEqual(
-            checkout('EEBB'), 85  # (40 * 2) + 45
+            checkout('EEBB'), 85  # (40 * 2) + (45) - (45 - 30)
         )
 
     def test_checkout_2_2e_discount_with_2b(self):
@@ -58,3 +58,4 @@ class CheckoutTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
