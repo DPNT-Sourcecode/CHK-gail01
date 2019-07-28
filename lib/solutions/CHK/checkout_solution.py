@@ -1,4 +1,3 @@
-import string
 from collections import Counter, namedtuple, defaultdict
 from typing import Dict
 
@@ -15,14 +14,6 @@ from typing import Dict
 """
 
 
-PRICE_LOOKUP = {
-    'A': 50,
-    'B': 30,
-    'C': 20,
-    'D': 15,
-    'E': 40,
-}
-
 Deal = namedtuple('Deal', ['sku', 'n_deals'])
 DEAL_CONFIG = (
     Deal('A', ((5, 200), (3, 130), (1, 50))),
@@ -31,10 +22,11 @@ DEAL_CONFIG = (
     Deal('D', ((1, 15), )),
     Deal('E', ((1, 40), )),
 )
+VALID_SKUS = [d.sku for d in DEAL_CONFIG]
 
 
 def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, int]:
-    deal_sums = defaultdict(int)
+    deal_sums: Dict[str, int] = defaultdict(int)
     for deal in DEAL_CONFIG:
         total_items_in_order = sku_counts.get(deal.sku)
         if total_items_in_order:
@@ -47,17 +39,16 @@ def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, 
     return deal_sums
 
 
-# TODO Handle discounting an item (if exists in skus) if multi-deal available
-
 def checkout(skus: str) -> int:
-    # Should only contain uppercases Letters in input
-    if set(skus).intersection(set(string.ascii_lowercase)):
-        return -1
-    if set(skus) - set(PRICE_LOOKUP.keys()):
+    if set(skus) - set(VALID_SKUS):
         return -1
 
     sku_counts = Counter(skus)
     multi_offer_totals = _calculate_multi_item_offer_totals(sku_counts)
 
-    return sum([v for v in multi_offer_totals.values()])
+    preliminary_total = sum([v for v in multi_offer_totals.values()])
+
+    # TODO Handle discounting an item (if exists in skus) if multi-deal available
+    return preliminary_total
+
 
