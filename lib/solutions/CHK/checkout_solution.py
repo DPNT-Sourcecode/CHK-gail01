@@ -88,6 +88,7 @@ def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, 
 
 
 def _calculate_item_adjustment(main_sku: str, free_sku: str, sku_counts: Dict[str, int]) -> int:
+    main_item_deal_group, free_item_deal_group, refund, discount = ADJUSTMENT_LOOKUP[main_sku]
     main_item_deal = DEAL_LOOKUP[main_sku]
     free_item_deal = DEAL_LOOKUP[free_sku]
     # main_item_deal_price = main
@@ -125,3 +126,4 @@ def checkout(skus: str) -> int:
 
     adjusted_free_b = _calculate_item_adjustment('E', 'B', sku_counts)
     return preliminary_total + adjusted_free_b
+
