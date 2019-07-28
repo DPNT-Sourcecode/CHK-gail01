@@ -39,7 +39,7 @@ def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, 
     return deal_sums
 
 
-def _calculate_item_discount(sku_counts: Dict[str, int]) -> int:
+def _calculate_item_adjustment(sku_counts: Dict[str, int]) -> int:
     # TODO Handle discounting an item (if exists in skus) if multi-deal available
     # ??? Always better to ignore free item if multi exists for that SKU?
     b_counts = sku_counts.get('B', 0)
@@ -53,8 +53,9 @@ def _calculate_item_discount(sku_counts: Dict[str, int]) -> int:
     discounted_price_count = two_e_deal_count - two_b_deals_count
     print('----')
     if b_counts and free_item_count and discounted_price_count:
-        restore = (discounted_price_count * 45)
+        restore = - (discounted_price_count * 45)
         print('restore', restore)
+        print('b_counts, free_item_count', b_counts, free_item_count)
         new_price = (30 * (b_counts - free_item_count))
         print('new_price', new_price)
         adjusted_price = restore - new_price
@@ -73,8 +74,9 @@ def checkout(skus: str) -> int:
 
     preliminary_total = sum([v for v in multi_offer_totals.values()])
 
-    cost_of_e = _calculate_item_discount(sku_counts)
+    cost_of_e = _calculate_item_adjustment(sku_counts)
     return preliminary_total + cost_of_e
+
 
 
 
