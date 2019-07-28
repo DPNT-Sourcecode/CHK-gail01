@@ -67,7 +67,3 @@ def checkout(skus: str) -> int:
 
     cost_of_e = _calculate_cost_of_E(sku_counts)
     return preliminary_total + cost_of_e
-
-
-
-
