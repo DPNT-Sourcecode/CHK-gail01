@@ -47,7 +47,7 @@ def _calculate_item_adjustment(sku_counts: Dict[str, int]) -> int:
     two_b_deals_count, b_singles = divmod(b_counts, 2)
 
     # If 2Es, and 2Bs reverse the cost of discounted 2 and add cost of single
-    free_item_count = two_e_deal_count
+    free_item_count = two_e_deal_count - (two_e_deal_count - b_counts)
     to_refund = two_e_deal_count - (two_e_deal_count - (two_b_deals_count - b_singles)) if two_b_deals_count else 0
     print(b_counts, free_item_count, to_refund)
     # 3 1 1
@@ -57,7 +57,9 @@ def _calculate_item_adjustment(sku_counts: Dict[str, int]) -> int:
     if two_b_deals_count and free_item_count:
         print('refund + discount')
         restore = - (to_refund * 45)
-        new_price = (30 * (b_counts - free_item_count))
+        print('restore', restore)
+        new_price = (30 * free_item_count)
+        print('new_price', new_price)
         adjusted_price = restore + new_price
         return adjusted_price
     elif not two_b_deals_count and b_counts and two_e_deal_count:
@@ -79,3 +81,4 @@ def checkout(skus: str) -> int:
     adjusted_free_b = _calculate_item_adjustment(sku_counts)
     print('----------')
     return preliminary_total + adjusted_free_b
+
