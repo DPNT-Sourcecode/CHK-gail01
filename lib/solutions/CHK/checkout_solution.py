@@ -2,16 +2,20 @@ import string
 from collections import Counter
 
 """
-Our price table and offers:
-+------+-------+----------------+
-| Item | Price | Special offers |
-+------+-------+----------------+
-| A    | 50    | 3A for 130     |
-| B    | 30    | 2B for 45      |
-| C    | 20    |                |
-| D    | 15    |                |
-+------+-------+----------------+
++------+-------+------------------------+
+| Item | Price | Special offers         |
++------+-------+------------------------+
+| A    | 50    | 3A for 130, 5A for 200 |
+| B    | 30    | 2B for 45              |
+| C    | 20    |                        |
+| D    | 15    |                        |
+| E    | 40    | 2E get one B free      |
++------+-------+------------------------+
 """
+
+# TODO Handle various offers on same item
+# TODO Handle discounting an item (if exists in skus)
+
 PRICE_LOOKUP = {
     'A': 50,
     'B': 30,
@@ -40,6 +44,7 @@ def checkout(skus: str) -> int:
 
     rest = sum([PRICE_LOOKUP[s] * c for s, c in sku_counts.items()])
     return multi_offers_total + rest
+
 
 
 
