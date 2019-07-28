@@ -44,8 +44,3 @@ def checkout(skus: str) -> int:
 
     rest = sum([PRICE_LOOKUP[s] * c for s, c in sku_counts.items()])
     return multi_offers_total + rest
-
-
-
-
-
