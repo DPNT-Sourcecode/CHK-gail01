@@ -21,6 +21,7 @@ DEAL_CONFIG = (
     Deal('C', ((1, 20), )),
     Deal('D', ((1, 15), )),
     Deal('E', ((1, 40), )),
+    Deal('F', ((3, 20), (2, 20), (1, 10))),
 )
 VALID_SKUS = [d.sku for d in DEAL_CONFIG] + ['E']
 
@@ -74,6 +75,7 @@ def checkout(skus: str) -> int:
 
     adjusted_free_b = _calculate_item_adjustment(sku_counts)
     return preliminary_total + adjusted_free_b
+
 
 
 
