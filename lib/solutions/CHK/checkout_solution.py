@@ -56,9 +56,9 @@ def _calculate_item_adjustment(sku_counts: Dict[str, int]) -> int:
         restore = - (discounted_price_count * 45)
         print('restore', restore)
         print('b_counts, free_item_count', b_counts, free_item_count)
-        new_price = (30 * (b_counts - free_item_count))
+        new_price = (30 * min([b_counts, free_item_count]))
         print('new_price', new_price)
-        adjusted_price = restore - new_price
+        adjusted_price = restore + new_price
         print('adjusted_price', adjusted_price)
         print('----')
         return adjusted_price
@@ -71,14 +71,9 @@ def checkout(skus: str) -> int:
 
     sku_counts = Counter(skus)
     multi_offer_totals = _calculate_multi_item_offer_totals(sku_counts)
+    print(multi_offer_totals)
 
     preliminary_total = sum([v for v in multi_offer_totals.values()])
 
-    cost_of_e = _calculate_item_adjustment(sku_counts)
-    return preliminary_total + cost_of_e
-
-
-
-
-
-
+    adjusted_free_b = _calculate_item_adjustment(sku_counts)
+    return preliminary_total + adjusted_free_b
