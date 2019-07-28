@@ -44,16 +44,18 @@ def _calculate_free_items_discount(sku_counts: Dict[str, int]) -> int:
     e_counts = sku_counts.get('E', 0)
 
     two_e_deal_count, _ = divmod(e_counts, 2)
-    _, b_singles = divmod(b_counts, 2)
+    two_b_deals_count, b_singles = divmod(b_counts, 2)
     print('----')
     print('2e_deals_count, ', two_e_deal_count)
     print('b_singles, ', b_singles)
     print(two_e_deal_count - b_singles)
     print((two_e_deal_count - b_singles) * 30)
     print('----')
-    if two_e_deal_count and b_singles:
-        return (two_e_deal_count - b_singles) * 30
-    return 0
+    mult_2, remainder = divmod(two_e_deal_count, 2)
+    # if b deals are a multiple of 2 remove that many from qualify 2e
+    to_remove = (two_b_deals_count - mult_2) * 45
+    to_remove += (b_singles - remainder) * 30 if (b_singles - remainder) > 0 else 0
+    return to_remove
 
 
 def checkout(skus: str) -> int:
@@ -71,11 +73,5 @@ def checkout(skus: str) -> int:
     # ??? Always better to ignore free item if multi exists for that SKU?
 
     discount = _calculate_free_items_discount(sku_counts)
-
+    print('discount', discount)
     return preliminary_total - discount
-
-
-
-
-
-
