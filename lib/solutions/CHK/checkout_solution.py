@@ -1,4 +1,5 @@
 import string
+from collections import Counter
 
 """
 Our price table and offers:
@@ -15,7 +16,12 @@ PRICE_LOOKUP = {
     'A': 50,
     'B': 30,
     'C': 20,
-    'D': 15
+    'D': 15,
+}
+
+DEAL_LOOKUP = {
+    ('A', 3): 130,
+    ('B', 2): 45
 }
 
 
@@ -25,10 +31,15 @@ def checkout(skus: str) -> int:
         return -1
     if set(skus) - set(PRICE_LOOKUP.keys()):
         return -1
+
+    sku_counts = Counter(skus)
+    
+
     try:
         return sum([PRICE_LOOKUP[s] for s in skus])
     except IndexError:
         return -1
+
 
 
 
