@@ -47,9 +47,10 @@ def _calculate_free_items_discount(sku_counts: Dict[str, int]) -> int:
     print('------')
     print(remainder)
     print(remainder - e_counts)
-    print(abs(remainder - e_counts))
     print('------')
     if remainder - e_counts > 0:
+        print('discounts to apply')
+        print((remainder - e_counts) * 30)
         return (remainder - e_counts) * 30
     return 0
 
@@ -69,6 +70,7 @@ def checkout(skus: str) -> int:
     discount = _calculate_free_items_discount(sku_counts)
 
     return preliminary_total - discount
+
 
 
 
