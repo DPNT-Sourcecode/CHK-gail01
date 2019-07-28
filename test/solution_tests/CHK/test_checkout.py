@@ -56,8 +56,24 @@ class CheckoutTests(unittest.TestCase):
             checkout('EEBBEE'), 160  # (40 * 4)
         )
 
+    def test_checkout_2e_b(self):
+        self.assertEqual(
+            checkout('EEB'), 80  # (40 * 2)
+        )
+
+    # def test_checkout_3e_b(self):
+    #     self.assertEqual(
+    #         checkout('EEEB'), 120  # (40 * 3)
+    #     )
+    #
+    # def test_checkout_AAAAAEEBAAABB(self):
+    #     self.assertEqual(
+    #         checkout('AAAAAEEBAAABB'), 455
+    #     )
+
 
 if __name__ == '__main__':
     unittest.main()
+
 
 
