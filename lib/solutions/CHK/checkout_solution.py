@@ -20,7 +20,7 @@ DEAL_CONFIG = (
     Deal('B', ((2, 45), (1, 30))),
     Deal('C', ((1, 20), )),
     Deal('D', ((1, 15), )),
-    # Deal('E', ((1, 40), )),
+    Deal('E', ((1, 40), )),
 )
 VALID_SKUS = [d.sku for d in DEAL_CONFIG] + ['E']
 
@@ -50,6 +50,7 @@ def _calculate_cost_of_E(sku_counts: Dict[str, int]) -> int:
     discount_items = two_b_deals_count
 
     mult_2, remainder = divmod(two_e_deal_count, 2)
+    return 0
 
     # if b deals are a multiple of 2 remove that many from qualify 2e
     discount_items -= (two_b_deals_count - mult_2)
@@ -67,3 +68,4 @@ def checkout(skus: str) -> int:
 
     cost_of_e = _calculate_cost_of_E(sku_counts)
     return preliminary_total + cost_of_e
+
