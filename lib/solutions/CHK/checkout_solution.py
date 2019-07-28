@@ -33,12 +33,13 @@ def checkout(skus: str) -> int:
         return -1
 
     sku_counts = Counter(skus)
-    
+    a_items = sku_counts.get('A', 0)
 
     try:
         return sum([PRICE_LOOKUP[s] for s in skus])
     except IndexError:
         return -1
+
 
 
 
