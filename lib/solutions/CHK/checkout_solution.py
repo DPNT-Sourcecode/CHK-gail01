@@ -58,7 +58,8 @@ def _calculate_item_adjustment(sku_counts: Dict[str, int]) -> int:
         return adjusted_price
     elif not two_b_deals_count and b_counts and two_e_deal_count:
         print('discount')
-        to_discount = max([b_counts - two_e_deal_count, 0])
+        to_discount = two_e_deal_count - (b_counts - two_e_deal_count)
+        print(to_discount)
         return - (30 * to_discount)
     return 0
 
@@ -74,6 +75,7 @@ def checkout(skus: str) -> int:
 
     adjusted_free_b = _calculate_item_adjustment(sku_counts)
     return preliminary_total + adjusted_free_b
+
 
 
 
