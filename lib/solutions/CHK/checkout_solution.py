@@ -39,7 +39,7 @@ def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, 
     return deal_sums
 
 
-def _calculate_cost_of_E(sku_counts: Dict[str, int]) -> int:
+def _calculate_item_discount(sku_counts: Dict[str, int]) -> int:
     # TODO Handle discounting an item (if exists in skus) if multi-deal available
     # ??? Always better to ignore free item if multi exists for that SKU?
     b_counts = sku_counts.get('B', 0)
@@ -47,14 +47,13 @@ def _calculate_cost_of_E(sku_counts: Dict[str, int]) -> int:
 
     two_e_deal_count, _ = divmod(e_counts, 2)
     two_b_deals_count, b_singles = divmod(b_counts, 2)
-    discount_items = two_b_deals_count
 
-    mult_2, remainder = divmod(two_e_deal_count, 2)
+    # If 2Es, and 2Bs reverse the cost of 2 and add cost of single
+    free_item_count = two_e_deal_count
+    
+
     return 0
 
-    # if b deals are a multiple of 2 remove that many from qualify 2e
-    discount_items -= (two_b_deals_count - mult_2)
-    return (e_counts * 40) - (discount_items * 30)
 
 
 def checkout(skus: str) -> int:
@@ -66,6 +65,7 @@ def checkout(skus: str) -> int:
 
     preliminary_total = sum([v for v in multi_offer_totals.values()])
 
-    cost_of_e = _calculate_cost_of_E(sku_counts)
+    cost_of_e = _calculate_item_discount(sku_counts)
     return preliminary_total + cost_of_e
+
 
