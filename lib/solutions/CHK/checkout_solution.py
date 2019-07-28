@@ -39,12 +39,17 @@ def checkout(skus: str) -> int:
         return -1
 
     sku_counts = Counter(skus)
-    mutli_offer_totals = defaultdict(list)
+    multi_offer_totals = defaultdict(list)
     for item_code, deal_num, deal_cost, normal_cost in DEAL_CONFIG:
         item_deal_count, item_singles = divmod(sku_counts.pop(item_code, 0), deal_num)
-        mutli_offer_totals[item_code].append((item_deal_count * deal_cost) + (item_singles * normal_cost))
-
+        multi_total = (item_deal_count * deal_cost) + (item_singles * normal_cost)
+        if multi_total:
+            multi_offer_totals[item_code].append(multi_total)
+    print(multi_total)
+    print([PRICE_LOOKUP[s] * c for s, c in sku_counts.items()])
+    print([min(v) for v in multi_offer_totals.values()])
     rest = sum([PRICE_LOOKUP[s] * c for s, c in sku_counts.items()])
-    return [min(v) for v in mutli_offer_totals.values()] + rest
+    return sum([min(v) for v in multi_offer_totals.values()]) + rest
+
 
 
