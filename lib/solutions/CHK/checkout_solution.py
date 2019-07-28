@@ -43,15 +43,16 @@ def _calculate_free_items_discount(sku_counts: Dict[str, int]) -> int:
     b_counts = sku_counts.get('B', 0)
     e_counts = sku_counts.get('E', 0)
 
-    _, remainder = divmod(b_counts, 2)
-    print('------')
-    print(remainder)
-    print(remainder - e_counts)
-    print('------')
-    if remainder - e_counts > 0:
-        print('discounts to apply')
-        print((remainder - e_counts) * 30)
-        return (remainder - e_counts) * 30
+    two_e_deal_count, _ = divmod(e_counts, 2)
+    _, b_singles = divmod(b_counts, 2)
+    print('----')
+    print('2e_deals_count, ', two_e_deal_count)
+    print('b_singles, ', b_singles)
+    print(two_e_deal_count - b_singles)
+    print((two_e_deal_count - b_singles) * 30)
+    print('----')
+    if two_e_deal_count and b_singles:
+        return (two_e_deal_count - b_singles) * 30
     return 0
 
 
@@ -72,6 +73,7 @@ def checkout(skus: str) -> int:
     discount = _calculate_free_items_discount(sku_counts)
 
     return preliminary_total - discount
+
 
 
 
