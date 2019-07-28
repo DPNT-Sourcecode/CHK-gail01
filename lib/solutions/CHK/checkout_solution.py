@@ -1,5 +1,5 @@
 import string
-from collections import Counter
+from collections import Counter, namedtuple, defaultdict
 
 """
 +------+-------+------------------------+
@@ -26,8 +26,9 @@ PRICE_LOOKUP = {
 
 DEAL_CONFIG = (
     ('A', 3, 130, 50),
+    ('A', 5, 200, 50),
     ('B', 2, 45, 30),
-)  # TODO Convert to NamedTuple or similar?
+)
 
 
 def checkout(skus: str) -> int:
@@ -38,11 +39,12 @@ def checkout(skus: str) -> int:
         return -1
 
     sku_counts = Counter(skus)
-    multi_offers_total = 0
+    mutli_offer_totals = defaultdict(list)
     for item_code, deal_num, deal_cost, normal_cost in DEAL_CONFIG:
         item_deal_count, item_singles = divmod(sku_counts.pop(item_code, 0), deal_num)
-        multi_offers_total += (item_deal_count * deal_cost) + (item_singles * normal_cost)
+        mutli_offer_totals[item_code].append((item_deal_count * deal_cost) + (item_singles * normal_cost))
 
     rest = sum([PRICE_LOOKUP[s] * c for s, c in sku_counts.items()])
-    return multi_offers_total + rest
+    return [min(v) for v in mutli_offer_totals.values()] + rest
+
 
