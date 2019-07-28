@@ -67,15 +67,15 @@ class CheckoutTests(unittest.TestCase):
         )
 
     def test_checkout_AAAAAEEBAAABB(self):
-        print('----------')
+        print('start----------')
         self.assertEqual(
             checkout('AAAAAEEBAAABB'), 455  # (200 + 80 + 0 + 130 + 45)
         )
-        print('----------')
 
 
 if __name__ == '__main__':
     unittest.main()
+
 
 
 
