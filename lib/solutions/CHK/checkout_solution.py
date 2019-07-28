@@ -26,7 +26,9 @@ def checkout(skus: str) -> int:
     # Should only contain uppercases Letters in input
     if set(skus).intersection(set(string.ascii_lowercase)):
         return -1
-    if set(skus)
+    if set(skus) - set(LOOKUP.keys()):
+        return -1
     return -1
+
 
 
