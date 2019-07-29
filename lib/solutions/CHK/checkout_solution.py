@@ -97,8 +97,9 @@ def _calculate_multi_item_group_offer(sku_counts: Counter) -> Tuple[Counter, int
     for sku in ['Z', 'S', 'T', 'Y', 'X']:  # ordered by price
         count = sku_counts[sku]
         gathered_offer_items.extend([sku] * count)
-
+    print(gathered_offer_items)
     offer_groups = list(chunk(gathered_offer_items, 3))
+    print(offer_groups)
     # Remove any incomplete groups
     if offer_groups:
         if len(offer_groups[-1]) != 3:
@@ -107,7 +108,7 @@ def _calculate_multi_item_group_offer(sku_counts: Counter) -> Tuple[Counter, int
 
         # Remove offer counts from sku_counts so not double counted
         to_remove = Counter([item for sublist in offer_groups for item in sublist])
-        sku_counts - to_remove
+        sku_counts = sku_counts - to_remove
         return sku_counts, offer_counts * 45
     return sku_counts, 0
 
@@ -149,12 +150,14 @@ def checkout(skus: str) -> int:
     sku_counts, multi_item_deal_total = _calculate_multi_item_group_offer(sku_counts)
     print(sku_counts, multi_item_deal_total)
     multi_offer_totals = _calculate_multi_item_offer_totals(sku_counts)
+    print(multi_offer_totals)
 
     preliminary_total = sum([v for v in multi_offer_totals.values()])
     adjusted_free_b = _calculate_item_adjustment('E', 'B', sku_counts)
     adjusted_free_m = _calculate_item_adjustment('N', 'M', sku_counts)
     adjusted_free_q = _calculate_item_adjustment('R', 'Q', sku_counts)
     return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q # + multi_item_deal_total
+
 
 
 

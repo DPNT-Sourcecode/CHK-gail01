@@ -115,7 +115,7 @@ class CheckoutTests(unittest.TestCase):
     def test_checkout_STXYZ(self):
         print('-------------------')
         self.assertEqual(
-            checkout('STXYZ'), 120  # 45 + 17 + 20
+            checkout('STXYZ'), 82  # 45 + 17 + 20
         )
 
     def test_checkout_STX(self):
@@ -126,5 +126,6 @@ class CheckoutTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
 
 
