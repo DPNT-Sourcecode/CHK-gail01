@@ -93,22 +93,23 @@ def _calculate_item_adjustment(main_sku: str, free_sku: str, sku_counts: Dict[st
     main_item_count = sku_counts.get(main_sku, 0)
     second_item_count = sku_counts.get(free_sku, 0)
 
-    two_e_deal_count, _ = divmod(main_item_count, main_item_deal_group)
-    two_b_deals_count, b_singles = divmod(second_item_count, second_item_deal_group)
+    main_deal_count, _ = divmod(main_item_count, main_item_deal_group)
+    secondary_deal_count, secondary_singles = divmod(second_item_count, second_item_deal_group)
 
-    # If 2Es, and 2Bs reverse the cost of discounted 2 and add cost of single
-    free_item_count = two_e_deal_count
-    to_refund = two_e_deal_count - (two_e_deal_count - (two_b_deals_count - b_singles)) if two_b_deals_count else 0
+    free_item_count = main_deal_count
+    to_refund = main_deal_count - (main_deal_count - (secondary_deal_count - secondary_singles)) if secondary_deal_count else 0
 
-    # If user paid full price on discounted 2B, refund 45 and + 30
-    if two_b_deals_count and free_item_count and not b_singles:
+    # If user paid full price on a discounted now free time, refund deal and apply cost of reduced item number
+    if refund and secondary_deal_count and free_item_count and not secondary_singles:
+        print('refund + deal')
         restore = - (to_refund * refund)
         new_price = (discount * (second_item_count - free_item_count))
         adjusted_price = restore + new_price
         return adjusted_price
-    # if user has a single b in order then discount with number of 2e
-    elif b_singles and two_e_deal_count:
-        to_discount = two_e_deal_count - (b_singles - two_e_deal_count)
+    # if user has only single secondary in order then discount with number of 2e
+    elif secondary_singles and main_deal_count:
+        print('refund item cost')
+        to_discount = main_deal_count - (secondary_singles - main_deal_count)
         return - (discount * to_discount)
     return 0
 
@@ -129,6 +130,7 @@ def checkout(skus: str) -> int:
     adjusted_free_q = _calculate_item_adjustment('R', 'Q', sku_counts)
     print(adjusted_free_q)
     return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q
+
 
 
 
