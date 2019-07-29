@@ -46,7 +46,7 @@ DEAL_CONFIG = (
     Deal('G', ((1, 20), )),
     Deal('H', ((10, 80), (5, 45), (1, 10))),
     Deal('I', ((1, 35), )),
-    Deal('I', ((1, 60), )),
+    Deal('J', ((1, 60), )),
     Deal('K', ((2, 150), (1, 80))),
     Deal('L', ((1, 90), )),
     Deal('M', ((1, 15), )),
@@ -127,6 +127,7 @@ def checkout(skus: str) -> int:
     adjusted_free_m = _calculate_item_adjustment('N', 'M', sku_counts)
     adjusted_free_q = _calculate_item_adjustment('R', 'Q', sku_counts)
     return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q
+
 
 
 

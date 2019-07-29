@@ -92,9 +92,25 @@ class CheckoutTests(unittest.TestCase):
             checkout('AAAAAEEBAAABBFFFNNNMRRRQ'), 745
         )
 
+    def test_checkout_I(self):
+        self.assertEqual(
+            checkout('I'), 35
+        )
+
+    def test_checkout_J(self):
+        self.assertEqual(
+            checkout('J'), 60
+        )
+
+    def test_checkout_ABCDEFGHIJKLMNOPQRSTUVWXYZ(self):
+        self.assertEqual(
+            checkout('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 965
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
+
 
 
 
