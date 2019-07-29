@@ -112,6 +112,12 @@ class CheckoutTests(unittest.TestCase):
             checkout('UUU'), 120
         )
 
+    def test_checkout_STXYZ(self):
+        self.assertEqual(
+            checkout('STXYZ'), 120
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
+

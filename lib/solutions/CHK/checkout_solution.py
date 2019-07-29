@@ -1,5 +1,5 @@
 from collections import Counter, namedtuple, defaultdict
-from typing import Dict
+from typing import Dict, Tuple
 
 """
 +------+-------+------------------------+
@@ -87,7 +87,7 @@ def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, 
     return deal_sums
 
 
-def _calculate_multi_item_group_offer(sku_counts: Dict[str, int]) -> int:
+def _calculate_multi_item_group_offer(sku_counts: Counter) -> Tuple[Counter, int]:
     OFFER_SKUS = ['Z', 'S', 'T', 'Y', 'X']  # ordered by price
 
     def chunk(array, size):
@@ -106,12 +106,12 @@ def _calculate_multi_item_group_offer(sku_counts: Dict[str, int]) -> int:
     offer_counts = len(offer_groups)
 
     # Remove offer counts from sku_counts so not double counted
-    
+    to_remove = Counter([item for sublist in offer_groups for item in sublist])
+    sku_counts - to_remove
+    return sku_counts, offer_counts * 45
 
 
-
-
-def _calculate_item_adjustment(main_sku: str, free_sku: str, sku_counts: Dict[str, int]) -> int:
+def _calculate_item_adjustment(main_sku: str, free_sku: str, sku_counts: Counter) -> int:
     main_item_deal_group, second_item_deal_group, refund, discount = ADJUSTMENT_LOOKUP[main_sku]
 
     main_item_count = sku_counts.get(main_sku, 0)
@@ -144,13 +144,15 @@ def checkout(skus: str) -> int:
         return -1
 
     sku_counts = Counter(skus)
+    sku_counts, multi_item_deal_total = _calculate_multi_item_group_offer(sku_counts)
     multi_offer_totals = _calculate_multi_item_offer_totals(sku_counts)
 
     preliminary_total = sum([v for v in multi_offer_totals.values()])
     adjusted_free_b = _calculate_item_adjustment('E', 'B', sku_counts)
     adjusted_free_m = _calculate_item_adjustment('N', 'M', sku_counts)
     adjusted_free_q = _calculate_item_adjustment('R', 'Q', sku_counts)
-    return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q
+    return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q # + multi_item_deal_total
+
 
 
 
