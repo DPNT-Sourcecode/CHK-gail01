@@ -152,10 +152,3 @@ def checkout(skus: str) -> int:
     adjusted_free_m = _calculate_item_adjustment('N', 'M', sku_counts)
     adjusted_free_q = _calculate_item_adjustment('R', 'Q', sku_counts)
     return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q + multi_item_deal_total
-
-
-
-
-
-
-
