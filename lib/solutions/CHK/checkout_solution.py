@@ -100,8 +100,13 @@ def _calculate_multi_item_group_offer(sku_counts: Dict[str, int]) -> int:
         gathered_offer_items.extend([sku] * count)
 
     offer_groups = list(chunk(gathered_offer_items, 3))
-    offer_counts = len(offer_groups)
+    # Remove any incomplete groups
     if len(offer_groups[-1]) != 3:
+        del(offer_groups[-1])
+    offer_counts = len(offer_groups)
+
+    # Remove offer counts from sku_counts so not double counted
+    
 
 
 
@@ -146,5 +151,6 @@ def checkout(skus: str) -> int:
     adjusted_free_m = _calculate_item_adjustment('N', 'M', sku_counts)
     adjusted_free_q = _calculate_item_adjustment('R', 'Q', sku_counts)
     return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q
+
 
 
