@@ -89,12 +89,15 @@ def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, 
 
 def _calculate_item_adjustment(main_sku: str, free_sku: str, sku_counts: Dict[str, int]) -> int:
     main_item_deal_group, second_item_deal_group, refund, discount = ADJUSTMENT_LOOKUP[main_sku]
-    # main_item_deal_price = main
+
     main_item_count = sku_counts.get(main_sku, 0)
     second_item_count = sku_counts.get(free_sku, 0)
 
     main_deal_count, _ = divmod(main_item_count, main_item_deal_group)
-    secondary_deal_count, secondary_singles = divmod(second_item_count, second_item_deal_group)
+    if second_item_deal_group:
+        secondary_deal_count, secondary_singles = divmod(second_item_count, second_item_deal_group)
+    else:
+        secondary_deal_count, secondary_singles = 0, second_item_count
 
     free_item_count = main_deal_count
     to_refund = main_deal_count - (main_deal_count - (secondary_deal_count - secondary_singles)) if secondary_deal_count else 0
@@ -123,13 +126,17 @@ def checkout(skus: str) -> int:
 
     preliminary_total = sum([v for v in multi_offer_totals.values()])
     print(preliminary_total)
+    print('B')
     adjusted_free_b = _calculate_item_adjustment('E', 'B', sku_counts)
     print(adjusted_free_b)
+    print('M')
     adjusted_free_m = _calculate_item_adjustment('N', 'M', sku_counts)
     print(adjusted_free_m)
+    print('Q')
     adjusted_free_q = _calculate_item_adjustment('R', 'Q', sku_counts)
     print(adjusted_free_q)
     return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q
+
 
 
 
