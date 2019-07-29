@@ -47,7 +47,7 @@ DEAL_CONFIG = (
     Deal('H', ((10, 80), (5, 45), (1, 10))),
     Deal('I', ((1, 35), )),
     Deal('J', ((1, 60), )),
-    Deal('K', ((2, 150), (1, 80))),
+    Deal('K', ((2, 120), (1, 70))),
     Deal('L', ((1, 90), )),
     Deal('M', ((1, 15), )),
     Deal('N', ((1, 40), )),
@@ -55,14 +55,14 @@ DEAL_CONFIG = (
     Deal('P', ((5, 200), (1, 50))),
     Deal('Q', ((3, 80), (1, 30))),
     Deal('R', ((1, 50), )),
-    Deal('S', ((1, 30), )),
+    Deal('S', ((1, 20), )),
     Deal('T', ((1, 20), )),
     Deal('U', ((4, 120), (3, 120), (2, 80), (1, 40))),
     Deal('V', ((3, 130), (2, 90), (1, 50))),
     Deal('W', ((1, 20), )),
-    Deal('X', ((1, 90), )),
-    Deal('Y', ((1, 10), )),
-    Deal('Z', ((1, 50), )),
+    Deal('X', ((1, 17), )),
+    Deal('Y', ((1, 20), )),
+    Deal('Z', ((1, 21), )),
 )
 VALID_SKUS = [d.sku for d in DEAL_CONFIG]
 DEAL_LOOKUP = {d.sku: d for d in DEAL_CONFIG}
@@ -85,6 +85,15 @@ def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, 
                 total_items_in_order -= (n_count * quotiant)
             deal_sums[deal.sku] = running_total
     return deal_sums
+
+
+def _calculate_multi_item_group_offer(sku_counts: Dict[str, int]) -> int:
+    OFFER_SKUS = ['Z', 'S', 'T', 'Y', 'X']  # ordered by price
+
+    gathered_offer_items = []
+    for sku, count in sku_counts:
+        if sku in OFFER_SKUS:
+            gathered_offer_items.extend([sku] * count)
 
 
 def _calculate_item_adjustment(main_sku: str, free_sku: str, sku_counts: Dict[str, int]) -> int:
@@ -127,3 +136,4 @@ def checkout(skus: str) -> int:
     adjusted_free_m = _calculate_item_adjustment('N', 'M', sku_counts)
     adjusted_free_q = _calculate_item_adjustment('R', 'Q', sku_counts)
     return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q
+
