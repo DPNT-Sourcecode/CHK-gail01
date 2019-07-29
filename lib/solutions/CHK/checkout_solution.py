@@ -90,10 +90,20 @@ def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, 
 def _calculate_multi_item_group_offer(sku_counts: Dict[str, int]) -> int:
     OFFER_SKUS = ['Z', 'S', 'T', 'Y', 'X']  # ordered by price
 
+    def chunk(array, size):
+        for i in range(0, len(array), size):
+            yield array[i:i+size]
+
     gathered_offer_items = []
-    for sku, count in sku_counts:
-        if sku in OFFER_SKUS:
-            gathered_offer_items.extend([sku] * count)
+    for sku in OFFER_SKUS:
+        count = sku_counts[sku]
+        gathered_offer_items.extend([sku] * count)
+
+    offer_groups = list(chunk(gathered_offer_items, 3))
+    offer_counts = len(offer_groups)
+    if len(offer_groups[-1]) != 3:
+
+
 
 
 def _calculate_item_adjustment(main_sku: str, free_sku: str, sku_counts: Dict[str, int]) -> int:
@@ -136,4 +146,5 @@ def checkout(skus: str) -> int:
     adjusted_free_m = _calculate_item_adjustment('N', 'M', sku_counts)
     adjusted_free_q = _calculate_item_adjustment('R', 'Q', sku_counts)
     return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q
+
 
