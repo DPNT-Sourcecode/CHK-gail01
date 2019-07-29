@@ -121,10 +121,14 @@ def checkout(skus: str) -> int:
     multi_offer_totals = _calculate_multi_item_offer_totals(sku_counts)
 
     preliminary_total = sum([v for v in multi_offer_totals.values()])
-
+    print(preliminary_total)
     adjusted_free_b = _calculate_item_adjustment('E', 'B', sku_counts)
+    print(adjusted_free_b)
     adjusted_free_m = _calculate_item_adjustment('N', 'M', sku_counts)
+    print(adjusted_free_m)
     adjusted_free_q = _calculate_item_adjustment('R', 'Q', sku_counts)
+    print(adjusted_free_q)
     return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q
+
 
 
