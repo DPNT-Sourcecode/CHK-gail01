@@ -88,27 +88,28 @@ def _calculate_multi_item_offer_totals(sku_counts: Dict[str, int]) -> Dict[str, 
 
 
 def _calculate_multi_item_group_offer(sku_counts: Counter) -> Tuple[Counter, int]:
-    OFFER_SKUS = ['Z', 'S', 'T', 'Y', 'X']  # ordered by price
 
     def chunk(array, size):
         for i in range(0, len(array), size):
             yield array[i:i+size]
 
     gathered_offer_items = []
-    for sku in OFFER_SKUS:
+    for sku in ['Z', 'S', 'T', 'Y', 'X']:  # ordered by price
         count = sku_counts[sku]
         gathered_offer_items.extend([sku] * count)
 
     offer_groups = list(chunk(gathered_offer_items, 3))
     # Remove any incomplete groups
-    if len(offer_groups[-1]) != 3:
-        del(offer_groups[-1])
-    offer_counts = len(offer_groups)
+    if offer_groups:
+        if len(offer_groups[-1]) != 3:
+            del(offer_groups[-1])
+        offer_counts = len(offer_groups)
 
-    # Remove offer counts from sku_counts so not double counted
-    to_remove = Counter([item for sublist in offer_groups for item in sublist])
-    sku_counts - to_remove
-    return sku_counts, offer_counts * 45
+        # Remove offer counts from sku_counts so not double counted
+        to_remove = Counter([item for sublist in offer_groups for item in sublist])
+        sku_counts - to_remove
+        return sku_counts, offer_counts * 45
+    return sku_counts, 0
 
 
 def _calculate_item_adjustment(main_sku: str, free_sku: str, sku_counts: Counter) -> int:
@@ -144,7 +145,9 @@ def checkout(skus: str) -> int:
         return -1
 
     sku_counts = Counter(skus)
+    print(sku_counts)
     sku_counts, multi_item_deal_total = _calculate_multi_item_group_offer(sku_counts)
+    print(sku_counts, multi_item_deal_total)
     multi_offer_totals = _calculate_multi_item_offer_totals(sku_counts)
 
     preliminary_total = sum([v for v in multi_offer_totals.values()])
@@ -152,6 +155,7 @@ def checkout(skus: str) -> int:
     adjusted_free_m = _calculate_item_adjustment('N', 'M', sku_counts)
     adjusted_free_q = _calculate_item_adjustment('R', 'Q', sku_counts)
     return preliminary_total + adjusted_free_b + adjusted_free_m + adjusted_free_q # + multi_item_deal_total
+
 
 
 
