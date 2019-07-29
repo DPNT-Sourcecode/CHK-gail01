@@ -107,9 +107,15 @@ class CheckoutTests(unittest.TestCase):
             checkout('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 965
         )
 
+    def test_checkout_UUU(self):
+        self.assertEqual(
+            checkout('UUU'), 120
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
+
 
 
 
