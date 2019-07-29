@@ -104,7 +104,7 @@ class CheckoutTests(unittest.TestCase):
 
     def test_checkout_ABCDEFGHIJKLMNOPQRSTUVWXYZ(self):
         self.assertEqual(
-            checkout('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 853
+            checkout('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 837
         )
 
     def test_checkout_UUU(self):
@@ -113,7 +113,6 @@ class CheckoutTests(unittest.TestCase):
         )
 
     def test_checkout_STXYZ(self):
-        print('-------------------')
         self.assertEqual(
             checkout('STXYZ'), 82  # 45 + 17 + 20
         )
@@ -126,6 +125,7 @@ class CheckoutTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
 
 
 
